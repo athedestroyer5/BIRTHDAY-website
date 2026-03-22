@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! ??</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-card: #151515;
+            --pink-main: #ff1493;
+            --pink-light: #ff69b4;
+            --pink-glow: rgba(255, 20, 147, 0.6);
+            --text-main: #ffffff;
+            --text-muted: #cccccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Confetti Canvas */
+        #confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--pink-main);
+            box-shadow: 0 0 30px var(--pink-glow);
+            margin-bottom: 2rem;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--text-main), var(--pink-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        /* Professional Buttons */
+        .btn {
+            background: transparent;
+            color: var(--pink-light);
+            border: 2px solid var(--pink-main);
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: var(--pink-main);
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover::before {
+            width: 100%;
+        }
+
+        .btn:hover {
+            color: white;
+            box-shadow: 0 0 20px var(--pink-glow);
+            transform: translateY(-3px);
+        }
+
+        /* Hidden Content Section */
+        .content-section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+            display: none;
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        /* Cards Layout */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 20, 147, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.15);
+            border-color: var(--pink-main);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            color: var(--pink-light);
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Message Box */
+        .message-box {
+            margin-top: 4rem;
+            background: linear-gradient(145deg, #111, #1a1a1a);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            border-left: 5px solid var(--pink-main);
+        }
+
+        #secret-message {
+            display: none;
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--pink-light);
+            line-height: 1.8;
+            animation: fadeIn 1s ease;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .hero-img { width: 140px; height: 140px; }
+            .message-box { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti"></canvas>
+
+    <header class="hero">
+        <!-- You can replace this src with an actual picture of her if you have one! -->
+        <img src="https://images.unsplash.com/photo-1550684376-efcbd6e3f031?q=80&w=800&auto=format&fit=crop" alt="Birthday Girl" class="hero-img">
+        
+        <h1>Happy Birthday!</h1>
+        <p class="subtitle">Distance means absolutely nothing when someone means so much. Happy birthday to my favorite notification! ??</p>
+        
+        <button class="btn" onclick="startCelebration()">Unwrap Your Present ??</button>
+    </header>
+
+    <section id="main-content" class="content-section">
+        
+        <div class="card-grid">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=800&auto=format&fit=crop" alt="Aesthetic Pink">
+                <h3>To My Best Online Friend</h3>
+                <p>We might be separated by miles and screens, but our bond is as real as it gets. Thank you for all the late-night chats, the laughs, and for always being there for me.</p>
+            </div>
+            
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=800&auto=format&fit=crop" alt="Neon Vibes">
+                <h3>You're Amazing</h3>
+                <p>Keep shining, keep smiling, and keep being the incredible person you are. I hope your day is filled with as much joy as you bring into my life every single day.</p>
+            </div>
+        </div>
+
+        <div class="message-box">
+            <h2 style="margin-bottom: 1rem;">I have one last thing to say...</h2>
+            <button class="btn" onclick="revealMessage()" id="reveal-btn">Read Secret Message ??</button>
+            <div id="secret-message">
+                "I hope this year brings you everything you have been working towards. You deserve the world, the stars, and everything in between. Let's promise to meet up in real life one day! Until then, sending you the biggest virtual hug ever. Have the best birthday!"
+            </div>
+        </div>
+
+    </section>
+
+    <script>
+        // --- Confetti Logic ---
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        const colors =['#ff1493', '#ff69b4', '#ffffff', '#ffb6c1'];
+
+        function createConfetti() {
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 2,
+                    speed: Math.random() * 3 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    angle: Math.random() * 360,
+                    spin: Math.random() * 0.2 - 0.1
+                });
+            }
+        }
+
+        function drawConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.angle);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+
+                p.y += p.speed;
+                p.angle += p.spin;
+
+                // Remove particles that fall off screen
+                if (p.y > canvas.height) {
+                    particles.splice(index, 1);
+                }
+            });
+            requestAnimationFrame(drawConfetti);
+        }
+
+        // --- Interactivity ---
+        function startCelebration() {
+            // Trigger Confetti
+            createConfetti();
+            drawConfetti();
+
+            // Show hidden content
+            const content = document.getElementById('main-content');
+            content.classList.add('visible');
+
+            // Scroll down smoothly
+            setTimeout(() => {
+                content.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+            
+            // Re-trigger confetti a few times for longer effect
+            setTimeout(createConfetti, 2000);
+            setTimeout(createConfetti, 4000);
+        }
+
+        function revealMessage() {
+            const msg = document.getElementById('secret-message');
+            const btn = document.getElementById('reveal-btn');
+            
+            msg.style.display = 'block';
+            btn.style.display = 'none'; // hide the button after clicking
+        }
+
+        // Handle window resize for canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
